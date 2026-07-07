@@ -1,0 +1,467 @@
+<title>Broker Pre-Qualification Assessment v2.0</title>
+<style>
+  :root{
+    --paper:#eef1ef;
+    --paper-raised:#ffffff;
+    --ink:#171a1c;
+    --ink-soft:#4b5350;
+    --line:#d5d9d6;
+    --accent:#26456b;
+    --accent-soft:#e4eaf1;
+    --gate:#a23b32;
+    --gate-soft:#f3e4e1;
+    --integrity:#a97a22;
+    --integrity-soft:#f2e9d6;
+    --good:#3f7a52;
+    --good-soft:#e2ede4;
+  }
+  :root[data-theme="dark"]{
+    --paper:#14171a;
+    --paper-raised:#1b1f22;
+    --ink:#e9ebe8;
+    --ink-soft:#a8b0ac;
+    --line:#2c3134;
+    --accent:#7fa8d1;
+    --accent-soft:#20303f;
+    --gate:#d97567;
+    --gate-soft:#3a2523;
+    --integrity:#d9a94d;
+    --integrity-soft:#3a2f1a;
+    --good:#6fbe8c;
+    --good-soft:#1f3327;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#14171a;
+      --paper-raised:#1b1f22;
+      --ink:#e9ebe8;
+      --ink-soft:#a8b0ac;
+      --line:#2c3134;
+      --accent:#7fa8d1;
+      --accent-soft:#20303f;
+      --gate:#d97567;
+      --gate-soft:#3a2523;
+      --integrity:#d9a94d;
+      --integrity-soft:#3a2f1a;
+      --good:#6fbe8c;
+      --good-soft:#1f3327;
+    }
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  .sheet{
+    max-width:840px;
+    margin:0 auto;
+    padding:56px 28px 96px;
+  }
+  .mono{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    font-variant-numeric:tabular-nums;
+  }
+  .eyebrow{
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  h1{
+    font-family:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-weight:600;
+    font-size:clamp(28px,4vw,38px);
+    margin:8px 0 6px;
+    text-wrap:balance;
+    letter-spacing:-.01em;
+  }
+  .dek{
+    color:var(--ink-soft);
+    font-size:16px;
+    max-width:62ch;
+    margin:0 0 28px;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px 20px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:10px 0;
+    margin-bottom:36px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  h2{
+    font-family:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:22px;
+    font-weight:600;
+    margin:52px 0 6px;
+    letter-spacing:-.005em;
+  }
+  h2 .num{
+    color:var(--ink-soft);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:14px;
+    font-weight:400;
+    margin-right:10px;
+  }
+  .section-intro{
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:66ch;
+    margin:0 0 20px;
+  }
+  .callout{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:3px solid var(--accent);
+    border-radius:4px;
+    padding:20px 22px;
+    margin:18px 0 34px;
+  }
+  .callout h3{
+    margin:0 0 10px;
+    font-size:14px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--accent);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-weight:600;
+  }
+  .callout ul{margin:0;padding-left:20px;}
+  .callout li{margin-bottom:8px;font-size:14.5px;}
+  .callout li:last-child{margin-bottom:0;}
+  .callout p{margin:0 0 10px;font-size:14.5px;}
+  .callout p:last-child{margin-bottom:0;}
+
+  .qcard{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:18px 20px 18px 20px;
+    margin-bottom:14px;
+    border-left-width:4px;
+    border-left-style:solid;
+  }
+  .qcard.gate{border-left-color:var(--gate);}
+  .qcard.scored{border-left-color:var(--accent);}
+  .qcard.integrity{border-left-color:var(--integrity);}
+
+  .qhead{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:8px;
+  }
+  .qid{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .qtag{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    padding:2px 7px;
+    border-radius:3px;
+    white-space:nowrap;
+  }
+  .gate .qtag{background:var(--gate-soft);color:var(--gate);}
+  .scored .qtag{background:var(--accent-soft);color:var(--accent);}
+  .integrity .qtag{background:var(--integrity-soft);color:var(--integrity);}
+
+  .qtext{
+    font-size:15.5px;
+    font-weight:600;
+    margin:0 0 10px;
+  }
+  .opts{
+    margin:0;
+    padding:0;
+    list-style:none;
+    font-size:14px;
+  }
+  .opts li{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    padding:5px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .opts li:last-child{border-bottom:none;}
+  .opts .pts{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    font-size:13px;
+  }
+  .note{
+    font-size:13px;
+    color:var(--ink-soft);
+    margin:10px 0 0;
+    padding-top:10px;
+    border-top:1px solid var(--line);
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+    margin:18px 0 8px;
+  }
+  caption{
+    text-align:left;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  th,td{
+    text-align:left;
+    padding:9px 12px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  th{
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  td.mono, th.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+  .tablewrap{overflow-x:auto;}
+  .pill{
+    display:inline-block;
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:11.5px;
+    padding:2px 8px;
+    border-radius:20px;
+  }
+  .pill.reject{background:var(--gate-soft);color:var(--gate);}
+  .pill.hold{background:var(--integrity-soft);color:var(--integrity);}
+  .pill.pass{background:var(--good-soft);color:var(--good);}
+
+  .divider{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:56px 0 0;
+  }
+  .fine{
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .keep{
+    border-left:3px solid var(--good);
+  }
+  .keep h3{color:var(--good);}
+  strong{font-weight:650;}
+</style>
+
+<div class="sheet">
+
+  <div class="eyebrow">EDM Lead Network — Broker Recruitment &amp; Operations</div>
+  <h1>Broker Pre-Qualification Assessment, v2.0</h1>
+  <p class="dek">A rebuilt version of the GHL intake quiz — every item closed-ended, every point auto-scorable, and the scoring model redesigned so it actually measures what predicts broker performance in a commission-only performance-marketing role.</p>
+  <div class="meta-row">
+    <span>PREPARED FOR: BROKER INTAKE / GHL AUTOMATION</span>
+    <span>SCALE: 0–100</span>
+    <span>MANUAL REVIEW REQUIRED: NONE</span>
+  </div>
+
+  <h2>What was wrong with v1</h2>
+  <div class="callout">
+    <h3>Four structural problems</h3>
+    <ul>
+      <li><strong>One open-ended item broke the automation promise.</strong> V1's own design brief states no applicant should consume human time below a 70 score — but Q5 ("walk me through day one") required Alexis to read and grade free text before any borderline decision could be made. One write-in question means the "zero manual review" system was never actually zero-touch.</li>
+      <li><strong>Passing a gate earned points.</strong> Q1 and Q2 were instant-disqualifiers, but answering "yes" to them also contributed 35 of the 100 possible points. That means two brokers with identical real competency could land on different sides of the qualified line just because one instrument conflated "meets the minimum requirement" with "is a strong candidate."</li>
+      <li><strong>No coverage of the risks specific to this industry.</strong> The single highest-cost hiring mistake in performance marketing isn't a slow broker — it's one who's currently double-dipping with a competing network, or who was already terminated elsewhere for lead fraud or compliance violations. V1 never asked.</li>
+      <li><strong>Self-report with no cross-check.</strong> Every score in V1 came from unverified self-report (Q3, Q4, Q7). There was no item that actually tests whether the candidate knows the tools or the compliance rules, versus just claims to.</li>
+    </ul>
+  </div>
+  <p class="fine">V2 below fixes all four: gates carry no points, four new gates close the risk gaps, one item tests real tool fluency instead of self-report, and the one open-ended item is replaced with an auto-scored situational-judgment question.</p>
+
+  <hr class="divider" />
+
+  <h2><span class="num">SECTION A</span>Hard Eliminators</h2>
+  <p class="section-intro">Pass/fail only — no points. A candidate must clear all seven before Section B is even scored. This is the one architectural change that matters most: table-stakes requirements no longer inflate the competency score.</p>
+
+  <div class="qcard gate">
+    <div class="qhead"><span class="qid">A1</span><span class="qtag">Yes / No</span></div>
+    <p class="qtext">Are you comfortable working in a commission-only structure with no base salary, where your income is 100% tied to accounts you activate and manage?</p>
+    <ul class="opts"><li>Yes <span class="pts">continue</span></li><li>No <span class="pts">auto-reject</span></li></ul>
+  </div>
+
+  <div class="qcard gate">
+    <div class="qhead"><span class="qid">A2</span><span class="qtag">Multiple choice</span></div>
+    <p class="qtext">How many hours per week can you commit to this role for the first 30 days?</p>
+    <ul class="opts">
+      <li>Under 10 hours <span class="pts">auto-reject</span></li>
+      <li>10–14 hours <span class="pts">auto-reject</span></li>
+      <li>15–19 hours <span class="pts">continue</span></li>
+      <li>20+ hours <span class="pts">continue</span></li>
+    </ul>
+    <p class="note">Same 15-hour floor as V1, but the extra bands give you real availability data for onboarding load balancing instead of a bare yes/no.</p>
+  </div>
+
+  <div class="qcard gate">
+    <div class="qhead"><span class="qid">A3</span><span class="qtag">Yes / No — new</span></div>
+    <p class="qtext">This is a 1099 independent contractor role with no employee benefits. You are responsible for your own tax withholding, including quarterly estimated payments. Do you understand and accept this?</p>
+    <ul class="opts"><li>Yes <span class="pts">continue</span></li><li>No <span class="pts">auto-reject</span></li></ul>
+  </div>
+
+  <div class="qcard gate">
+    <div class="qhead"><span class="qid">A4</span><span class="qtag">Yes / No — new</span></div>
+    <p class="qtext">Are you currently bound by a non-compete, exclusivity, or non-solicitation agreement with another performance marketing network, brokerage, or agency?</p>
+    <ul class="opts"><li>No <span class="pts">continue</span></li><li>Yes <span class="pts">auto-reject</span></li></ul>
+    <p class="note">Closes the single most expensive blind spot in V1. A broker who's contractually tied elsewhere creates conflict-of-interest and account-routing exposure the moment they're assigned advertisers.</p>
+  </div>
+
+  <div class="qcard gate">
+    <div class="qhead"><span class="qid">A5</span><span class="qtag">Yes / No — new</span></div>
+    <p class="qtext">Has any network, affiliate platform, or brokerage ever suspended or terminated an account of yours for fraud, lead quality, or compliance violations?</p>
+    <ul class="opts"><li>No <span class="pts">continue</span></li><li>Yes <span class="pts">auto-reject</span></li></ul>
+    <p class="note">Advertiser trust is the network's entire asset. One broker with a fraud history is a bigger liability than ten slow ones — V1 had no question that would have caught this.</p>
+  </div>
+
+  <div class="qcard gate">
+    <div class="qhead"><span class="qid">A6</span><span class="qtag">Yes / No</span></div>
+    <p class="qtext">Are you willing to submit a weekly performance report every Monday by 10 AM without exception, including weeks where results are low?</p>
+    <ul class="opts"><li>Yes, no problem <span class="pts">continue</span></li><li>Yes, but may need reminders <span class="pts">auto-reject</span></li><li>No / depends <span class="pts">auto-reject</span></li></ul>
+  </div>
+
+  <div class="qcard gate">
+    <div class="qhead"><span class="qid">A7</span><span class="qtag">Yes / No — new</span></div>
+    <p class="qtext">Can you guarantee a response to advertiser or publisher contacts within 4 business hours, Monday–Friday, during your stated availability window?</p>
+    <ul class="opts"><li>Yes <span class="pts">continue</span></li><li>No <span class="pts">auto-reject</span></li></ul>
+    <p class="note">V1 only stated the 4-hour SLA in the closing script of the live interview — after the intake quiz. Moving it into the gate means nobody reaches a video call unqualified on a requirement they never actually agreed to.</p>
+  </div>
+
+  <hr class="divider" />
+
+  <h2><span class="num">SECTION B</span>Scored Competency — 90 points</h2>
+  <p class="section-intro">Applies only to candidates who cleared every Section A gate. Every item is multiple choice or multi-select; nothing here requires a human to read prose and assign a grade.</p>
+
+  <div class="qcard scored">
+    <div class="qhead"><span class="qid">B1</span><span class="qtag">Multiple choice · 0–20 pts</span></div>
+    <p class="qtext">Have you previously worked within a CRM or tracking system where daily activity logging was required? (e.g. Salesforce, HubSpot, GoHighLevel, Pipedrive)</p>
+    <ul class="opts">
+      <li>Yes, used daily <span class="pts">20</span></li>
+      <li>Yes, occasionally <span class="pts">11</span></li>
+      <li>No, but willing to learn <span class="pts">5</span></li>
+      <li>No <span class="pts">0</span></li>
+    </ul>
+  </div>
+
+  <div class="qcard scored">
+    <div class="qhead"><span class="qid">B2</span><span class="qtag">Multiple choice · 0–20 pts</span></div>
+    <p class="qtext">In your most recent role or business, what was your average monthly commission or performance-based earnings?</p>
+    <ul class="opts">
+      <li>$5,000+ / mo <span class="pts">20</span></li>
+      <li>$2,000–$4,999 / mo <span class="pts">13</span></li>
+      <li>$500–$1,999 / mo <span class="pts">7</span></li>
+      <li>Under $500 / N/A <span class="pts">0</span></li>
+    </ul>
+  </div>
+
+  <div class="qcard scored">
+    <div class="qhead"><span class="qid">B3</span><span class="qtag">Multi-select · 0–15 pts — new</span></div>
+    <p class="qtext">Which of the following tracking platforms have you personally configured postbacks or pixels in? Select all that apply.</p>
+    <ul class="opts">
+      <li>Everflow / HasOffers (Tune) / Cake <span class="pts">3 pts each</span></li>
+      <li>Linktrust / Offer18 / Hitpath <span class="pts">3 pts each</span></li>
+      <li>None of the above <span class="pts">0</span></li>
+    </ul>
+    <p class="note">Capped at 15. Replaces a vague "system experience" self-rating with a check against the actual platforms this network runs on — a candidate either knows the tools or doesn't.</p>
+  </div>
+
+  <div class="qcard scored">
+    <div class="qhead"><span class="qid">B4</span><span class="qtag">Situational judgment · 0–25 pts — replaces old Q5</span></div>
+    <p class="qtext">You're assigned three new advertiser accounts that must be live and producing within 7 days. What do you do on day one?</p>
+    <ul class="opts">
+      <li>Contact all three advertiser/publisher accounts same day to confirm contacts and tracking requirements, then log a 7-day activation checklist <span class="pts">25</span></li>
+      <li>Start with whichever account looks easiest to activate first, plan the other two once it's live <span class="pts">13</span></li>
+      <li>Read the full SOP end to end before contacting anyone, even if it pushes outreach past day one <span class="pts">8</span></li>
+      <li>Wait for the account contacts to reach out first so I understand what they need <span class="pts">0</span></li>
+    </ul>
+    <p class="note">Same construct V1's Q5 was reaching for — process thinking under a deadline — but with answer options ranked in advance instead of a paragraph someone has to read and judge. Fully removes the one manual-review step in the entire funnel.</p>
+  </div>
+
+  <div class="qcard scored">
+    <div class="qhead"><span class="qid">B5</span><span class="qtag">Multi-select · 0–10 pts</span></div>
+    <p class="qtext">What performance marketing verticals have you worked in? Select all that apply.</p>
+    <ul class="opts">
+      <li>Insurance / FE / Medicare <span class="pts">5 pts</span></li>
+      <li>Solar / Home Services <span class="pts">5 pts</span></li>
+      <li>Legal / Mass Tort <span class="pts">5 pts</span></li>
+      <li>Debt / Financial <span class="pts">5 pts</span></li>
+      <li>None <span class="pts">0</span></li>
+    </ul>
+    <p class="note">Unchanged from V1 — capped at 10 regardless of how many are selected.</p>
+  </div>
+
+  <hr class="divider" />
+
+  <h2><span class="num">SECTION C</span>Integrity Check — 10 points</h2>
+  <div class="qcard integrity">
+    <div class="qhead"><span class="qid">C1</span><span class="qtag">Instructed response — new</span></div>
+    <p class="qtext">To confirm you're reading each question fully rather than clicking through, select "Legal / Mass Tort" as your answer to this item.</p>
+    <ul class="opts">
+      <li>Legal / Mass Tort (the instructed answer) <span class="pts">10, continue</span></li>
+      <li>Any other answer <span class="pts">auto-reject, tag: careless-submission</span></li>
+    </ul>
+    <p class="note">Standard survey-integrity technique: an instructed-response item catches bots, click-farmed applications, and candidates speed-running the quiz without reading it — all of which quietly inflate a "qualified" pool with noise. Rotate the instructed vertical/phrase periodically so it can't be memorized and shared.</p>
+  </div>
+
+  <hr class="divider" />
+
+  <h2>Updated scoring rubric</h2>
+  <p class="section-intro">Same four-band structure as V1, but nothing below it requires Alexis to read free text — even the borderline band is now driven entirely by the Section B/C score.</p>
+  <div class="tablewrap">
+  <table>
+    <caption>Automated action by total Section B + C score (0–100)</caption>
+    <thead><tr><th>Score</th><th>Classification</th><th>Automated action</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">0–49</td><td><span class="pill reject">Not qualified</span></td><td>Auto-reject email. Tag: <span class="mono">scored-low</span>. 90-day re-application window.</td></tr>
+      <tr><td class="mono">50–69</td><td><span class="pill hold">Borderline</span></td><td>Auto-routed to a short supplemental video-response round (Part 2 of the interview script, below) before a scheduling decision. No manual text grading — the video round replaces it.</td></tr>
+      <tr><td class="mono">70–84</td><td><span class="pill pass">Qualified</span></td><td>Calendar link auto-sent. Tag: <span class="mono">qualified</span>. Assigned to junior broker for pre-call prep.</td></tr>
+      <tr><td class="mono">85–100</td><td><span class="pill pass">High priority</span></td><td>Same as qualified + immediate Teams ping to Alexis. Fast-track review.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="fine">Any single Section A failure (A1–A7) overrides all of the above — reject fires immediately regardless of when the candidate would have reached Section B.</p>
+
+  <hr class="divider" />
+
+  <h2>What to leave alone</h2>
+  <div class="callout keep">
+    <h3>Keep the live video interview open-ended</h3>
+    <p>The five-question interview script (Task 3 in the original doc) is a different instrument doing a different job, and it should stay qualitative. A situational-judgment survey is built to filter at scale before any human time is spent; the interview exists for the opposite reason — to observe <em>how</em> someone constructs an answer under mild pressure, not just which option they'd pick. Forcing those five questions into multiple choice would remove exactly the signal they're designed to capture: hesitation, defensiveness, whether they can build a specific example versus a generic one.</p>
+    <p>If you want more consistency without losing that signal, don't convert the questions — standardize the <em>scoring</em>. Give whoever conducts the interview a 0–3 rating per question (0 = red flag as written in the original script, 1 = weak, 2 = solid, 3 = exceptional) and log it as a number in GHL alongside the intake score. That gives you a combined quantitative view without pretending a behavioral interview is a quiz.</p>
+  </div>
+
+  <hr class="divider" />
+
+  <h2>Implementation notes for GHL</h2>
+  <div class="callout">
+    <ul>
+      <li>Add four new custom fields for the Section A gates that didn't exist in V1: <span class="mono">TAX_ACK</span>, <span class="mono">NONCOMPETE_FLAG</span>, <span class="mono">FRAUD_HISTORY_FLAG</span>, <span class="mono">SLA_ACK</span>.</li>
+      <li>Rebuild the <span class="mono">INTAKE_SCORE</span> calculation to sum only Section B + C (previously it included Q1/Q2 gate points).</li>
+      <li>Delete the "default score 8 until reviewed" logic on old Q5 — B6 auto-scores immediately, so the borderline branch no longer waits on manual input.</li>
+      <li>Add the instructed-response check on C1 as a rejection branch parallel to the existing eliminator checks.</li>
+      <li>Rotate the C1 instructed phrase quarterly and keep a private log of which phrase was live for which applicant batch, in case of disputes.</li>
+    </ul>
+  </div>
+
+</div>
