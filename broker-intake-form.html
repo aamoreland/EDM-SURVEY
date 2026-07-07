@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Broker Pre-Qualification Assessment</title>
+<style>
+  :root{
+    --paper:#eef1ef;
+    --paper-raised:#ffffff;
+    --ink:#171a1c;
+    --ink-soft:#4b5350;
+    --line:#d5d9d6;
+    --accent:#26456b;
+    --accent-soft:#e4eaf1;
+    --gate:#a23b32;
+    --gate-soft:#f3e4e1;
+    --integrity:#a97a22;
+    --integrity-soft:#f2e9d6;
+    --good:#3f7a52;
+    --good-soft:#e2ede4;
+    --amber:#c08a2e;
+    --amber-soft:#f4ead2;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#14171a;
+      --paper-raised:#1b1f22;
+      --ink:#e9ebe8;
+      --ink-soft:#a8b0ac;
+      --line:#2c3134;
+      --accent:#7fa8d1;
+      --accent-soft:#20303f;
+      --gate:#d97567;
+      --gate-soft:#3a2523;
+      --integrity:#d9a94d;
+      --integrity-soft:#3a2f1a;
+      --good:#6fbe8c;
+      --good-soft:#1f3327;
+      --amber:#d9a94d;
+      --amber-soft:#332a15;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;
+    margin:0;
+    padding:0;
+  }
+  .sheet{ max-width:760px; margin:0 auto; padding:48px 20px 120px; }
+  .mono{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-variant-numeric:tabular-nums; }
+  .eyebrow{
+    font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  h1{
+    font-family:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-weight:600; font-size:clamp(26px,4vw,34px); margin:8px 0 6px; text-wrap:balance;
+  }
+  .dek{ color:var(--ink-soft); font-size:15.5px; max-width:60ch; margin:0 0 32px; }
+  h2{
+    font-family:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    font-size:20px; font-weight:600; margin:44px 0 6px;
+  }
+  h2 .num{
+    color:var(--ink-soft); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:13px; font-weight:400; margin-right:8px;
+  }
+  .section-intro{ color:var(--ink-soft); font-size:14.5px; max-width:62ch; margin:0 0 18px; }
+
+  fieldset{ border:none; margin:0; padding:0; }
+  .qcard{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:4px;
+    padding:18px 20px; margin-bottom:14px; border-left-width:4px; border-left-style:solid;
+  }
+  .qcard.gate{ border-left-color:var(--gate); }
+  .qcard.scored{ border-left-color:var(--accent); }
+  .qcard.integrity{ border-left-color:var(--integrity); }
+  .qcard.invalid{ outline:2px solid var(--gate); outline-offset:2px; }
+
+  .qhead{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:8px; }
+  .qid{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; color:var(--ink-soft); white-space:nowrap; }
+  .qtag{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:.06em; padding:2px 7px; border-radius:3px; white-space:nowrap;
+  }
+  .gate .qtag{ background:var(--gate-soft); color:var(--gate); }
+  .scored .qtag{ background:var(--accent-soft); color:var(--accent); }
+  .integrity .qtag{ background:var(--integrity-soft); color:var(--integrity); }
+
+  legend.qtext{ font-size:15px; font-weight:600; margin:0 0 12px; padding:0; float:left; width:100%; }
+  .opts{ margin:0; padding:0; list-style:none; font-size:14px; clear:both; }
+  .opts li{ border-bottom:1px dashed var(--line); }
+  .opts li:last-child{ border-bottom:none; }
+  .opt-label{
+    display:flex; align-items:center; gap:10px; padding:8px 4px; cursor:pointer; border-radius:3px;
+  }
+  .opt-label:hover{ background:var(--accent-soft); }
+  .opt-label input{ accent-color:var(--accent); width:16px; height:16px; flex:none; }
+  .opt-label span{ flex:1; }
+
+  .helptext{ font-size:12.5px; color:var(--ink-soft); margin-top:8px; }
+
+  .submitbar{
+    position:sticky; bottom:0; background:var(--paper); padding:18px 0 8px; margin-top:40px;
+    border-top:1px solid var(--line);
+  }
+  button{
+    font-family:inherit; font-size:15px; font-weight:600; padding:13px 26px; border-radius:5px;
+    border:none; background:var(--accent); color:var(--paper-raised); cursor:pointer; width:100%;
+  }
+  button:hover{ opacity:.92; }
+  .formnote{ font-size:12.5px; color:var(--ink-soft); text-align:center; margin-top:10px; }
+
+  #result{ display:none; }
+  #result.show{ display:block; }
+  #formwrap.hide{ display:none; }
+
+  .resultcard{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:6px;
+    padding:32px; text-align:center; margin-top:8px;
+  }
+  .resultcard .score{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:52px; font-weight:600; margin:6px 0; font-variant-numeric:tabular-nums;
+  }
+  .badge{
+    display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:13px; text-transform:uppercase; letter-spacing:.06em; padding:5px 14px; border-radius:20px;
+    margin-bottom:14px;
+  }
+  .badge.reject{ background:var(--gate-soft); color:var(--gate); }
+  .badge.hold{ background:var(--amber-soft); color:var(--amber); }
+  .badge.pass{ background:var(--good-soft); color:var(--good); }
+  .resultmsg{ font-size:14.5px; color:var(--ink-soft); max-width:52ch; margin:0 auto; }
+  .breakdown{ text-align:left; margin-top:26px; border-top:1px solid var(--line); padding-top:18px; }
+  .breakdown table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  .breakdown td{ padding:6px 4px; border-bottom:1px solid var(--line); }
+  .breakdown td:last-child{ text-align:right; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  .restart{ background:transparent; color:var(--accent); border:1px solid var(--line); margin-top:20px; }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="eyebrow">EDM Lead Network — Broker Intake</div>
+  <h1>Broker Pre-Qualification Assessment</h1>
+  <p class="dek">Seven pass/fail requirements, then a 100-point competency score. Every question is closed-ended — nothing here needs to be manually reviewed before you get a decision.</p>
+
+  <div id="formwrap">
+    <form id="intakeForm">
+
+      <h2><span class="num">SECTION A</span>Requirements</h2>
+      <p class="section-intro">Answer all seven. A single disqualifying answer ends the assessment immediately.</p>
+      <div id="sectionA"></div>
+
+      <h2><span class="num">SECTION B</span>Experience &amp; Fit — 90 points</h2>
+      <p class="section-intro">Only scored if you clear every requirement above.</p>
+      <div id="sectionB"></div>
+
+      <h2><span class="num">SECTION C</span>Integrity Check — 10 points</h2>
+      <div id="sectionC"></div>
+
+      <div class="submitbar">
+        <button type="submit">Submit assessment</button>
+        <p class="formnote">All fields required. You'll get your result immediately.</p>
+      </div>
+    </form>
+  </div>
+
+  <div id="result">
+    <div class="resultcard">
+      <div id="badge" class="badge">—</div>
+      <div id="scoreDisplay" class="score mono">0<span style="font-size:22px;color:var(--ink-soft);">/100</span></div>
+      <p id="resultMsg" class="resultmsg"></p>
+      <div id="breakdown" class="breakdown"></div>
+      <button id="restartBtn" class="restart" type="button">Start over</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  // ---- Question bank -------------------------------------------------
+  // type: "gate" (pass/fail, no points) | "scored" (single-select points)
+  //       | "multiscore" (checkbox group, capped) | "integrity" (gate + points on pass)
+  var GATES = [
+    {
+      id:"A1", tag:"Yes / No",
+      text:"Are you comfortable working in a commission-only structure with no base salary, where your income is 100% tied to accounts you activate and manage?",
+      options:[
+        {label:"Yes", disqualify:false},
+        {label:"No", disqualify:true}
+      ]
+    },
+    {
+      id:"A2", tag:"Multiple choice",
+      text:"How many hours per week can you commit to this role for the first 30 days?",
+      options:[
+        {label:"Under 10 hours", disqualify:true},
+        {label:"10–14 hours", disqualify:true},
+        {label:"15–19 hours", disqualify:false},
+        {label:"20+ hours", disqualify:false}
+      ]
+    },
+    {
+      id:"A3", tag:"Yes / No",
+      text:"This is a 1099 independent contractor role with no employee benefits. You are responsible for your own tax withholding, including quarterly estimated payments. Do you understand and accept this?",
+      options:[
+        {label:"Yes", disqualify:false},
+        {label:"No", disqualify:true}
+      ]
+    },
+    {
+      id:"A4", tag:"Yes / No",
+      text:"Are you currently bound by a non-compete, exclusivity, or non-solicitation agreement with another performance marketing network, brokerage, or agency?",
+      options:[
+        {label:"No", disqualify:false},
+        {label:"Yes", disqualify:true}
+      ]
+    },
+    {
+      id:"A5", tag:"Yes / No",
+      text:"Has any network, affiliate platform, or brokerage ever suspended or terminated an account of yours for fraud, lead quality, or compliance violations?",
+      options:[
+        {label:"No", disqualify:false},
+        {label:"Yes", disqualify:true}
+      ]
+    },
+    {
+      id:"A6", tag:"Multiple choice",
+      text:"Are you willing to submit a weekly performance report every Monday by 10 AM without exception, including weeks where results are low?",
+      options:[
+        {label:"Yes, no problem", disqualify:false},
+        {label:"Yes, but may need reminders", disqualify:true},
+        {label:"No / depends", disqualify:true}
+      ]
+    },
+    {
+      id:"A7", tag:"Yes / No",
+      text:"Can you guarantee a response to advertiser or publisher contacts within 4 business hours, Monday–Friday, during your stated availability window?",
+      options:[
+        {label:"Yes", disqualify:false},
+        {label:"No", disqualify:true}
+      ]
+    }
+  ];
+
+  var SCORED = [
+    {
+      id:"B1", type:"scored", tag:"Multiple choice · 0–20 pts",
+      text:"Have you previously worked within a CRM or tracking system where daily activity logging was required? (e.g. Salesforce, HubSpot, GoHighLevel, Pipedrive)",
+      options:[
+        {label:"Yes, used daily", points:20},
+        {label:"Yes, occasionally", points:11},
+        {label:"No, but willing to learn", points:5},
+        {label:"No", points:0}
+      ]
+    },
+    {
+      id:"B2", type:"scored", tag:"Multiple choice · 0–20 pts",
+      text:"In your most recent role or business, what was your average monthly commission or performance-based earnings?",
+      options:[
+        {label:"$5,000+ / mo", points:20},
+        {label:"$2,000–$4,999 / mo", points:13},
+        {label:"$500–$1,999 / mo", points:7},
+        {label:"Under $500 / N/A", points:0}
+      ]
+    },
+    {
+      id:"B3", type:"multiscore", tag:"Select all that apply · 0–15 pts",
+      text:"Which of the following tracking platforms have you personally configured postbacks or pixels in?",
+      cap:15,
+      options:[
+        {label:"Everflow", points:3},
+        {label:"HasOffers (Tune)", points:3},
+        {label:"Cake", points:3},
+        {label:"Linktrust", points:3},
+        {label:"Offer18", points:3},
+        {label:"Hitpath", points:3},
+        {label:"None of the above", points:0, exclusive:true}
+      ]
+    },
+    {
+      id:"B4", type:"scored", tag:"Situational judgment · 0–25 pts",
+      text:"You're assigned three new advertiser accounts that must be live and producing within 7 days. What do you do on day one?",
+      options:[
+        {label:"Contact all three advertiser/publisher accounts same day to confirm contacts and tracking requirements, then log a 7-day activation checklist", points:25},
+        {label:"Start with whichever account looks easiest to activate first, plan the other two once it's live", points:13},
+        {label:"Read the full SOP end to end before contacting anyone, even if it pushes outreach past day one", points:8},
+        {label:"Wait for the account contacts to reach out first so I understand what they need", points:0}
+      ]
+    },
+    {
+      id:"B5", type:"multiscore", tag:"Select all that apply · 0–10 pts",
+      text:"What performance marketing verticals have you worked in?",
+      cap:10,
+      options:[
+        {label:"Insurance / FE / Medicare", points:5},
+        {label:"Solar / Home Services", points:5},
+        {label:"Legal / Mass Tort", points:5},
+        {label:"Debt / Financial", points:5},
+        {label:"None", points:0, exclusive:true}
+      ]
+    }
+  ];
+
+  var INTEGRITY = {
+    id:"C1", type:"integrity", tag:"Instructed response · 0 or 10 pts",
+    text:'To confirm you’re reading each question fully rather than clicking through, select “Legal / Mass Tort” as your answer to this item.',
+    options:[
+      {label:"Insurance / FE / Medicare", correct:false},
+      {label:"Solar / Home Services", correct:false},
+      {label:"Legal / Mass Tort", correct:true},
+      {label:"Debt / Financial", correct:false}
+    ]
+  };
+
+  // ---- Render -----------------------------------------------------------
+  function el(tag, attrs, html){
+    var e = document.createElement(tag);
+    if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  function renderChoiceCard(container, q, cardClass, inputType){
+    var card = el("div", {class:"qcard " + cardClass, "data-qid": q.id});
+    var head = el("div", {class:"qhead"},
+      '<span class="qid">'+q.id+'</span><span class="qtag">'+q.tag+'</span>');
+    card.appendChild(head);
+
+    var fs = el("fieldset");
+    var legend = el("legend", {class:"qtext"}, q.text);
+    fs.appendChild(legend);
+
+    var list = el("ul", {class:"opts"});
+    q.options.forEach(function(opt, i){
+      var li = el("li");
+      var label = el("label", {class:"opt-label"});
+      var input = el("input", {
+        type: inputType,
+        name: q.id,
+        value: String(i)
+      });
+      label.appendChild(input);
+      var span = el("span", null, opt.label);
+      label.appendChild(span);
+      li.appendChild(label);
+      list.appendChild(li);
+    });
+    fs.appendChild(list);
+    card.appendChild(fs);
+
+    if (q.cap){
+      card.appendChild(el("p", {class:"helptext"}, "Capped at " + q.cap + " points regardless of how many you select."));
+    }
+    container.appendChild(card);
+    return card;
+  }
+
+  var sectionA = document.getElementById("sectionA");
+  var sectionB = document.getElementById("sectionB");
+  var sectionC = document.getElementById("sectionC");
+
+  GATES.forEach(function(q){ renderChoiceCard(sectionA, q, "gate", "radio"); });
+  SCORED.forEach(function(q){
+    renderChoiceCard(sectionB, q, "scored", q.type === "multiscore" ? "checkbox" : "radio");
+  });
+  renderChoiceCard(sectionC, INTEGRITY, "integrity", "radio");
+
+  // Exclusive-option handling for multiscore ("None of the above" clears others)
+  SCORED.filter(function(q){ return q.type === "multiscore"; }).forEach(function(q){
+    var card = document.querySelector('[data-qid="'+q.id+'"]');
+    var boxes = card.querySelectorAll('input[type="checkbox"]');
+    boxes.forEach(function(box, i){
+      box.addEventListener("change", function(){
+        var opt = q.options[i];
+        if (opt.exclusive && box.checked){
+          boxes.forEach(function(b, j){ if (j !== i) b.checked = false; });
+        } else if (box.checked){
+          boxes.forEach(function(b, j){ if (q.options[j].exclusive) b.checked = false; });
+        }
+      });
+    });
+  });
+
+  // ---- Scoring ------------------------------------------------------
+  var form = document.getElementById("intakeForm");
+  var formwrap = document.getElementById("formwrap");
+  var resultEl = document.getElementById("result");
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+
+    document.querySelectorAll(".qcard").forEach(function(c){ c.classList.remove("invalid"); });
+
+    var allQuestions = GATES.concat(SCORED).concat([INTEGRITY]);
+    var firstInvalid = null;
+    allQuestions.forEach(function(q){
+      var card = document.querySelector('[data-qid="'+q.id+'"]');
+      var checked = card.querySelectorAll('input:checked');
+      if (checked.length === 0){
+        card.classList.add("invalid");
+        if (!firstInvalid) firstInvalid = card;
+      }
+    });
+    if (firstInvalid){
+      firstInvalid.scrollIntoView({behavior:"smooth", block:"center"});
+      return;
+    }
+
+    // Gate check
+    var disqualified = false;
+    GATES.forEach(function(q){
+      var checked = document.querySelector('input[name="'+q.id+'"]:checked');
+      var opt = q.options[Number(checked.value)];
+      if (opt.disqualify) disqualified = true;
+    });
+
+    var integrityChecked = document.querySelector('input[name="'+INTEGRITY.id+'"]:checked');
+    var integrityOpt = INTEGRITY.options[Number(integrityChecked.value)];
+    if (!integrityOpt.correct) disqualified = true;
+
+    // Score
+    var breakdown = [];
+    var total = 0;
+    SCORED.forEach(function(q){
+      var pts = 0;
+      if (q.type === "scored"){
+        var checked = document.querySelector('input[name="'+q.id+'"]:checked');
+        pts = q.options[Number(checked.value)].points;
+      } else {
+        var boxes = document.querySelectorAll('input[name="'+q.id+'"]:checked');
+        var raw = 0;
+        boxes.forEach(function(b){ raw += q.options[Number(b.value)].points; });
+        pts = Math.min(raw, q.cap);
+      }
+      total += pts;
+      var maxPts = q.type === "scored"
+        ? Math.max.apply(null, q.options.map(function(o){ return o.points; }))
+        : q.cap;
+      breakdown.push([q.id, pts, maxPts]);
+    });
+    if (integrityOpt.correct){
+      total += 10;
+      breakdown.push(["C1", 10, 10]);
+    } else {
+      breakdown.push(["C1", 0, 10]);
+    }
+
+    showResult(disqualified, total, breakdown);
+  });
+
+  function showResult(disqualified, total, breakdown){
+    var badge = document.getElementById("badge");
+    var scoreDisplay = document.getElementById("scoreDisplay");
+    var msg = document.getElementById("resultMsg");
+    var breakdownEl = document.getElementById("breakdown");
+
+    scoreDisplay.innerHTML = (disqualified ? "—" : total) + '<span style="font-size:22px;color:var(--ink-soft);">/100</span>';
+
+    if (disqualified){
+      badge.className = "badge reject";
+      badge.textContent = "Not qualified";
+      msg.textContent = "One or more requirements in Section A weren't met, so this application doesn't move forward. Thank you for your time.";
+      breakdownEl.innerHTML = "";
+    } else if (total < 50){
+      badge.className = "badge reject";
+      badge.textContent = "Not qualified";
+      msg.textContent = "Your score is below the qualifying threshold. You're welcome to re-apply in 90 days.";
+    } else if (total < 70){
+      badge.className = "badge hold";
+      badge.textContent = "Borderline — under review";
+      msg.textContent = "You've cleared every requirement but scored in the borderline range. You'll be routed to a short supplemental video round before a scheduling decision.";
+    } else if (total < 85){
+      badge.className = "badge pass";
+      badge.textContent = "Qualified";
+      msg.textContent = "You've qualified for the next step. A calendar link for your video interview will be sent shortly.";
+    } else {
+      badge.className = "badge pass";
+      badge.textContent = "High priority";
+      msg.textContent = "Strong score across the board. You'll be fast-tracked for a priority interview slot.";
+    }
+
+    if (!disqualified){
+      var rows = breakdown.map(function(r){
+        return "<tr><td>"+r[0]+"</td><td>"+r[1]+" / "+r[2]+"</td></tr>";
+      }).join("");
+      breakdownEl.innerHTML = "<table>"+rows+"</table>";
+    }
+
+    formwrap.classList.add("hide");
+    resultEl.classList.add("show");
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  document.getElementById("restartBtn").addEventListener("click", function(){
+    form.reset();
+    document.querySelectorAll(".qcard").forEach(function(c){ c.classList.remove("invalid"); });
+    resultEl.classList.remove("show");
+    formwrap.classList.remove("hide");
+    window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+})();
+</script>
+</body>
+</html>
