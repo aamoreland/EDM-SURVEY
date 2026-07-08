@@ -41,7 +41,8 @@
       --amber-soft:#332a15;
     }
   }
-  *{box-sizing:border-box;}
+  *{ box-sizing:border-box; }
+  html{ -webkit-tap-highlight-color:transparent; }
   body{
     background:var(--paper);
     color:var(--ink);
@@ -49,233 +50,237 @@
     line-height:1.55;
     margin:0;
     padding:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
   }
-  .sheet{ max-width:760px; margin:0 auto; padding:48px 20px 120px; }
   .mono{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-variant-numeric:tabular-nums; }
+  a, button{ font-family:inherit; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:3px; }
+
+  /* ---------- progress header ---------- */
+  .progress-header{
+    position:sticky; top:0; z-index:10; background:var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:14px 20px 12px;
+  }
+  .progress-header.hidden{ display:none; }
+  .progress-meta{
+    display:flex; justify-content:space-between; align-items:baseline;
+    max-width:640px; margin:0 auto 8px; font-size:12px; color:var(--ink-soft);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  .progress-track{
+    max-width:640px; margin:0 auto; height:5px; border-radius:3px; background:var(--line); overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; background:var(--accent); border-radius:3px; width:0%;
+    transition:width .35s ease;
+  }
+  @media (prefers-reduced-motion: reduce){ .progress-fill{ transition:none; } }
+
+  /* ---------- stage ---------- */
+  main{ flex:1; display:flex; flex-direction:column; }
+  .stage{
+    flex:1; display:flex; align-items:center; justify-content:center; padding:32px 20px 24px;
+  }
+  .panel{ width:100%; max-width:640px; }
+
+  /* ---------- intro ---------- */
+  .intro{ text-align:left; }
   .eyebrow{
     font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-soft);
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   }
   h1{
     font-family:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,serif;
-    font-weight:600; font-size:clamp(26px,4vw,34px); margin:8px 0 6px; text-wrap:balance;
+    font-weight:600; font-size:clamp(26px,5vw,36px); margin:10px 0 12px; text-wrap:balance;
   }
-  .dek{ color:var(--ink-soft); font-size:15.5px; max-width:60ch; margin:0 0 32px; }
-  h2{
-    font-family:ui-serif,"Iowan Old Style","Palatino Linotype",Georgia,serif;
-    font-size:20px; font-weight:600; margin:44px 0 6px;
+  .dek{ color:var(--ink-soft); font-size:16px; max-width:56ch; margin:0 0 28px; }
+  .intro-facts{
+    display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px;
   }
-  h2 .num{
-    color:var(--ink-soft); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:13px; font-weight:400; margin-right:8px;
+  .fact{
+    font-size:12.5px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    color:var(--ink-soft); background:var(--paper-raised); border:1px solid var(--line);
+    padding:6px 12px; border-radius:20px;
   }
-  .section-intro{ color:var(--ink-soft); font-size:14.5px; max-width:62ch; margin:0 0 18px; }
 
-  fieldset{ border:none; margin:0; padding:0; }
+  /* ---------- question card ---------- */
   .qcard{
-    background:var(--paper-raised); border:1px solid var(--line); border-radius:4px;
-    padding:18px 20px; margin-bottom:14px; border-left-width:4px; border-left-style:solid;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:8px;
+    padding:28px 26px; border-left-width:5px; border-left-style:solid;
+    opacity:0; transform:translateY(8px); animation:enter .32s ease forwards;
   }
+  @keyframes enter{ to{ opacity:1; transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .qcard{ animation:none; opacity:1; transform:none; } }
   .qcard.gate{ border-left-color:var(--gate); }
   .qcard.scored{ border-left-color:var(--accent); }
   .qcard.integrity{ border-left-color:var(--integrity); }
-  .qcard.invalid{ outline:2px solid var(--gate); outline-offset:2px; }
 
-  .qhead{ display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin-bottom:8px; }
-  .qid{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:12px; color:var(--ink-soft); white-space:nowrap; }
+  .qkicker{
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+  }
   .qtag{
     font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:10.5px; text-transform:uppercase;
-    letter-spacing:.06em; padding:2px 7px; border-radius:3px; white-space:nowrap;
+    letter-spacing:.06em; padding:3px 8px; border-radius:3px; white-space:nowrap;
   }
   .gate .qtag{ background:var(--gate-soft); color:var(--gate); }
   .scored .qtag{ background:var(--accent-soft); color:var(--accent); }
   .integrity .qtag{ background:var(--integrity-soft); color:var(--integrity); }
+  .qsection{ font-size:11.5px; color:var(--ink-soft); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
 
-  legend.qtext{ font-size:15px; font-weight:600; margin:0 0 12px; padding:0; float:left; width:100%; }
-  .opts{ margin:0; padding:0; list-style:none; font-size:14px; clear:both; }
-  .opts li{ border-bottom:1px dashed var(--line); }
-  .opts li:last-child{ border-bottom:none; }
+  legend.qtext{
+    display:block; font-size:19px; font-weight:600; line-height:1.4; margin:0 0 20px; padding:0;
+  }
+
+  .opts{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
   .opt-label{
-    display:flex; align-items:center; gap:10px; padding:8px 4px; cursor:pointer; border-radius:3px;
+    display:flex; align-items:flex-start; gap:12px; padding:13px 14px; cursor:pointer;
+    border-radius:6px; border:1.5px solid var(--line); background:transparent;
+    transition:border-color .15s ease, background .15s ease;
   }
-  .opt-label:hover{ background:var(--accent-soft); }
-  .opt-label input{ accent-color:var(--accent); width:16px; height:16px; flex:none; }
-  .opt-label span{ flex:1; }
+  .opt-label:hover{ border-color:var(--accent); }
+  .opt-label.selected{ border-color:var(--accent); background:var(--accent-soft); }
+  .opt-label input{ accent-color:var(--accent); width:19px; height:19px; flex:none; margin-top:1px; }
+  .opt-label span{ flex:1; font-size:14.5px; padding-top:1px; }
 
-  .helptext{ font-size:12.5px; color:var(--ink-soft); margin-top:8px; }
+  .helptext{ font-size:12.5px; color:var(--ink-soft); margin:14px 0 0; }
 
-  .submitbar{
-    position:sticky; bottom:0; background:var(--paper); padding:18px 0 8px; margin-top:40px;
-    border-top:1px solid var(--line);
+  /* ---------- footer nav ---------- */
+  .navbar{
+    border-top:1px solid var(--line); padding:16px 20px; display:flex; justify-content:center;
   }
+  .navbar.hidden{ display:none; }
+  .navrow{ width:100%; max-width:640px; display:flex; gap:12px; align-items:center; }
   button{
-    font-family:inherit; font-size:15px; font-weight:600; padding:13px 26px; border-radius:5px;
-    border:none; background:var(--accent); color:var(--paper-raised); cursor:pointer; width:100%;
+    font-size:15px; font-weight:600; padding:13px 22px; border-radius:6px; border:none;
+    cursor:pointer;
   }
-  button:hover{ opacity:.92; }
-  .formnote{ font-size:12.5px; color:var(--ink-soft); text-align:center; margin-top:10px; }
+  .btn-primary{ background:var(--accent); color:var(--paper-raised); flex:1; }
+  .btn-primary:disabled{ opacity:.4; cursor:not-allowed; }
+  .btn-primary:not(:disabled):hover{ opacity:.92; }
+  .btn-ghost{
+    background:transparent; color:var(--ink-soft); border:1.5px solid var(--line);
+  }
+  .btn-ghost:hover{ border-color:var(--ink-soft); color:var(--ink); }
+  .btn-full{ width:100%; }
 
-  #result{ display:none; }
-  #result.show{ display:block; }
-  #formwrap.hide{ display:none; }
-
+  /* ---------- result ---------- */
   .resultcard{
-    background:var(--paper-raised); border:1px solid var(--line); border-radius:6px;
-    padding:32px; text-align:center; margin-top:8px;
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:8px;
+    padding:36px 30px; text-align:center;
+    opacity:0; transform:translateY(8px); animation:enter .32s ease forwards;
   }
-  .resultcard .score{
-    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:52px; font-weight:600; margin:6px 0; font-variant-numeric:tabular-nums;
-  }
+  @media (prefers-reduced-motion: reduce){ .resultcard{ animation:none; opacity:1; transform:none; } }
   .badge{
     display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-    font-size:13px; text-transform:uppercase; letter-spacing:.06em; padding:5px 14px; border-radius:20px;
-    margin-bottom:14px;
+    font-size:13px; text-transform:uppercase; letter-spacing:.06em; padding:6px 16px; border-radius:20px;
+    margin-bottom:16px;
   }
   .badge.reject{ background:var(--gate-soft); color:var(--gate); }
   .badge.hold{ background:var(--amber-soft); color:var(--amber); }
   .badge.pass{ background:var(--good-soft); color:var(--good); }
-  .resultmsg{ font-size:14.5px; color:var(--ink-soft); max-width:52ch; margin:0 auto; }
-  .breakdown{ text-align:left; margin-top:26px; border-top:1px solid var(--line); padding-top:18px; }
-  .breakdown table{ width:100%; border-collapse:collapse; font-size:13.5px; }
-  .breakdown td{ padding:6px 4px; border-bottom:1px solid var(--line); }
-  .breakdown td:last-child{ text-align:right; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
-  .restart{ background:transparent; color:var(--accent); border:1px solid var(--line); margin-top:20px; }
+  .score{
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:56px; font-weight:600; margin:4px 0 14px; font-variant-numeric:tabular-nums;
+  }
+  .score small{ font-size:22px; color:var(--ink-soft); font-weight:400; }
+  .resultmsg{ font-size:15px; color:var(--ink-soft); max-width:48ch; margin:0 auto; }
+  .breakdown{ text-align:left; margin-top:28px; border-top:1px solid var(--line); padding-top:20px; }
+  .breakdown-title{
+    font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; margin:0 0 12px;
+  }
+  .breakdown table{ width:100%; border-collapse:collapse; font-size:14px; }
+  .breakdown td{ padding:8px 2px; border-bottom:1px solid var(--line); }
+  .breakdown td:last-child{ text-align:right; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; color:var(--ink-soft); }
+  .breakdown tr.total td{ border-bottom:none; padding-top:12px; font-weight:600; color:var(--ink); }
+
+  @media (max-width:480px){
+    .qcard{ padding:22px 18px; }
+    legend.qtext{ font-size:17px; }
+    .resultcard{ padding:28px 20px; }
+    .score{ font-size:44px; }
+  }
 </style>
 </head>
 <body>
-<div class="sheet">
 
-  <div class="eyebrow">EDM Lead Network — Broker Intake</div>
-  <h1>Broker Pre-Qualification Assessment</h1>
-  <p class="dek">Seven pass/fail requirements, then a 100-point competency score. Every question is closed-ended — nothing here needs to be manually reviewed before you get a decision.</p>
-
-  <div id="formwrap">
-    <form id="intakeForm">
-
-      <h2><span class="num">SECTION A</span>Requirements</h2>
-      <p class="section-intro">Answer all seven. A single disqualifying answer ends the assessment immediately.</p>
-      <div id="sectionA"></div>
-
-      <h2><span class="num">SECTION B</span>Experience &amp; Fit — 90 points</h2>
-      <p class="section-intro">Only scored if you clear every requirement above.</p>
-      <div id="sectionB"></div>
-
-      <h2><span class="num">SECTION C</span>Integrity Check — 10 points</h2>
-      <div id="sectionC"></div>
-
-      <div class="submitbar">
-        <button type="submit">Submit assessment</button>
-        <p class="formnote">All fields required. You'll get your result immediately.</p>
-      </div>
-    </form>
-  </div>
-
-  <div id="result">
-    <div class="resultcard">
-      <div id="badge" class="badge">—</div>
-      <div id="scoreDisplay" class="score mono">0<span style="font-size:22px;color:var(--ink-soft);">/100</span></div>
-      <p id="resultMsg" class="resultmsg"></p>
-      <div id="breakdown" class="breakdown"></div>
-      <button id="restartBtn" class="restart" type="button">Start over</button>
+  <div id="progressHeader" class="progress-header hidden">
+    <div class="progress-meta">
+      <span id="progressLabel">Section A · Requirements</span>
+      <span id="progressCount" class="mono">1 / 13</span>
     </div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
   </div>
 
-</div>
+  <main>
+    <div class="stage">
+      <div id="stageContent" class="panel"></div>
+    </div>
+    <div id="navbar" class="navbar hidden">
+      <div class="navrow">
+        <button id="backBtn" class="btn-ghost" type="button">Back</button>
+        <button id="nextBtn" class="btn-primary" type="button" disabled>Next</button>
+      </div>
+    </div>
+  </main>
 
 <script>
 (function(){
 
   // ---- Question bank -------------------------------------------------
-  // type: "gate" (pass/fail, no points) | "scored" (single-select points)
-  //       | "multiscore" (checkbox group, capped) | "integrity" (gate + points on pass)
-  var GATES = [
-    {
-      id:"A1", tag:"Yes / No",
+  var QUESTIONS = [
+    { id:"A1", section:"A", sectionLabel:"Section A · Requirements", kind:"gate", tag:"Yes / No", shortLabel:"Commission-only comfort",
       text:"Are you comfortable working in a commission-only structure with no base salary, where your income is 100% tied to accounts you activate and manage?",
-      options:[
-        {label:"Yes", disqualify:false},
-        {label:"No", disqualify:true}
-      ]
-    },
-    {
-      id:"A2", tag:"Multiple choice",
+      options:[ {label:"Yes", disqualify:false}, {label:"No", disqualify:true} ] },
+    { id:"A2", section:"A", sectionLabel:"Section A · Requirements", kind:"gate", tag:"Multiple choice", shortLabel:"Weekly availability",
       text:"How many hours per week can you commit to this role for the first 30 days?",
       options:[
         {label:"Under 10 hours", disqualify:true},
         {label:"10–14 hours", disqualify:true},
         {label:"15–19 hours", disqualify:false},
         {label:"20+ hours", disqualify:false}
-      ]
-    },
-    {
-      id:"A3", tag:"Yes / No",
+      ] },
+    { id:"A3", section:"A", sectionLabel:"Section A · Requirements", kind:"gate", tag:"Yes / No", shortLabel:"1099 acknowledgment",
       text:"This is a 1099 independent contractor role with no employee benefits. You are responsible for your own tax withholding, including quarterly estimated payments. Do you understand and accept this?",
-      options:[
-        {label:"Yes", disqualify:false},
-        {label:"No", disqualify:true}
-      ]
-    },
-    {
-      id:"A4", tag:"Yes / No",
+      options:[ {label:"Yes", disqualify:false}, {label:"No", disqualify:true} ] },
+    { id:"A4", section:"A", sectionLabel:"Section A · Requirements", kind:"gate", tag:"Yes / No", shortLabel:"Non-compete check",
       text:"Are you currently bound by a non-compete, exclusivity, or non-solicitation agreement with another performance marketing network, brokerage, or agency?",
-      options:[
-        {label:"No", disqualify:false},
-        {label:"Yes", disqualify:true}
-      ]
-    },
-    {
-      id:"A5", tag:"Yes / No",
+      options:[ {label:"No", disqualify:false}, {label:"Yes", disqualify:true} ] },
+    { id:"A5", section:"A", sectionLabel:"Section A · Requirements", kind:"gate", tag:"Yes / No", shortLabel:"Fraud / compliance history",
       text:"Has any network, affiliate platform, or brokerage ever suspended or terminated an account of yours for fraud, lead quality, or compliance violations?",
-      options:[
-        {label:"No", disqualify:false},
-        {label:"Yes", disqualify:true}
-      ]
-    },
-    {
-      id:"A6", tag:"Multiple choice",
+      options:[ {label:"No", disqualify:false}, {label:"Yes", disqualify:true} ] },
+    { id:"A6", section:"A", sectionLabel:"Section A · Requirements", kind:"gate", tag:"Multiple choice", shortLabel:"Weekly reporting commitment",
       text:"Are you willing to submit a weekly performance report every Monday by 10 AM without exception, including weeks where results are low?",
       options:[
         {label:"Yes, no problem", disqualify:false},
         {label:"Yes, but may need reminders", disqualify:true},
         {label:"No / depends", disqualify:true}
-      ]
-    },
-    {
-      id:"A7", tag:"Yes / No",
+      ] },
+    { id:"A7", section:"A", sectionLabel:"Section A · Requirements", kind:"gate", tag:"Yes / No", shortLabel:"Response-time SLA",
       text:"Can you guarantee a response to advertiser or publisher contacts within 4 business hours, Monday–Friday, during your stated availability window?",
-      options:[
-        {label:"Yes", disqualify:false},
-        {label:"No", disqualify:true}
-      ]
-    }
-  ];
+      options:[ {label:"Yes", disqualify:false}, {label:"No", disqualify:true} ] },
 
-  var SCORED = [
-    {
-      id:"B1", type:"scored", tag:"Multiple choice · 0–20 pts",
+    { id:"B1", section:"B", sectionLabel:"Section B · Experience & Fit", kind:"scored", tag:"Multiple choice · 0–20 pts", shortLabel:"CRM / tracking discipline",
       text:"Have you previously worked within a CRM or tracking system where daily activity logging was required? (e.g. Salesforce, HubSpot, GoHighLevel, Pipedrive)",
       options:[
         {label:"Yes, used daily", points:20},
         {label:"Yes, occasionally", points:11},
         {label:"No, but willing to learn", points:5},
         {label:"No", points:0}
-      ]
-    },
-    {
-      id:"B2", type:"scored", tag:"Multiple choice · 0–20 pts",
+      ] },
+    { id:"B2", section:"B", sectionLabel:"Section B · Experience & Fit", kind:"scored", tag:"Multiple choice · 0–20 pts", shortLabel:"Prior commission earnings",
       text:"In your most recent role or business, what was your average monthly commission or performance-based earnings?",
       options:[
         {label:"$5,000+ / mo", points:20},
         {label:"$2,000–$4,999 / mo", points:13},
         {label:"$500–$1,999 / mo", points:7},
         {label:"Under $500 / N/A", points:0}
-      ]
-    },
-    {
-      id:"B3", type:"multiscore", tag:"Select all that apply · 0–15 pts",
+      ] },
+    { id:"B3", section:"B", sectionLabel:"Section B · Experience & Fit", kind:"multiscore", tag:"Select all that apply · 0–15 pts", shortLabel:"Tracking-platform fluency", cap:15,
       text:"Which of the following tracking platforms have you personally configured postbacks or pixels in?",
-      cap:15,
       options:[
         {label:"Everflow", points:3},
         {label:"HasOffers (Tune)", points:3},
@@ -284,44 +289,49 @@
         {label:"Offer18", points:3},
         {label:"Hitpath", points:3},
         {label:"None of the above", points:0, exclusive:true}
-      ]
-    },
-    {
-      id:"B4", type:"scored", tag:"Situational judgment · 0–25 pts",
+      ] },
+    { id:"B4", section:"B", sectionLabel:"Section B · Experience & Fit", kind:"scored", tag:"Situational judgment · 0–25 pts", shortLabel:"Day-one process",
       text:"You're assigned three new advertiser accounts that must be live and producing within 7 days. What do you do on day one?",
       options:[
         {label:"Contact all three advertiser/publisher accounts same day to confirm contacts and tracking requirements, then log a 7-day activation checklist", points:25},
         {label:"Start with whichever account looks easiest to activate first, plan the other two once it's live", points:13},
         {label:"Read the full SOP end to end before contacting anyone, even if it pushes outreach past day one", points:8},
         {label:"Wait for the account contacts to reach out first so I understand what they need", points:0}
-      ]
-    },
-    {
-      id:"B5", type:"multiscore", tag:"Select all that apply · 0–10 pts",
+      ] },
+    { id:"B5", section:"B", sectionLabel:"Section B · Experience & Fit", kind:"multiscore", tag:"Select all that apply · 0–10 pts", shortLabel:"Vertical experience", cap:10,
       text:"What performance marketing verticals have you worked in?",
-      cap:10,
       options:[
         {label:"Insurance / FE / Medicare", points:5},
         {label:"Solar / Home Services", points:5},
         {label:"Legal / Mass Tort", points:5},
         {label:"Debt / Financial", points:5},
         {label:"None", points:0, exclusive:true}
-      ]
-    }
+      ] },
+
+    { id:"C1", section:"C", sectionLabel:"Section C · Integrity Check", kind:"integrity", tag:"Instructed response", shortLabel:"Attention check",
+      text:'To confirm you’re reading each question fully rather than clicking through, select “Legal / Mass Tort” as your answer to this item.',
+      options:[
+        {label:"Insurance / FE / Medicare", correct:false},
+        {label:"Solar / Home Services", correct:false},
+        {label:"Legal / Mass Tort", correct:true},
+        {label:"Debt / Financial", correct:false}
+      ] }
   ];
 
-  var INTEGRITY = {
-    id:"C1", type:"integrity", tag:"Instructed response · 0 or 10 pts",
-    text:'To confirm you’re reading each question fully rather than clicking through, select “Legal / Mass Tort” as your answer to this item.',
-    options:[
-      {label:"Insurance / FE / Medicare", correct:false},
-      {label:"Solar / Home Services", correct:false},
-      {label:"Legal / Mass Tort", correct:true},
-      {label:"Debt / Financial", correct:false}
-    ]
-  };
+  var TOTAL = QUESTIONS.length;
 
-  // ---- Render -----------------------------------------------------------
+  // ---- State ----------------------------------------------------------
+  var state = { screen:"intro", qIndex:0, answers:{} };
+
+  var progressHeader = document.getElementById("progressHeader");
+  var progressLabel = document.getElementById("progressLabel");
+  var progressCount = document.getElementById("progressCount");
+  var progressFill = document.getElementById("progressFill");
+  var stageContent = document.getElementById("stageContent");
+  var navbar = document.getElementById("navbar");
+  var backBtn = document.getElementById("backBtn");
+  var nextBtn = document.getElementById("nextBtn");
+
   function el(tag, attrs, html){
     var e = document.createElement(tag);
     if (attrs) for (var k in attrs) e.setAttribute(k, attrs[k]);
@@ -329,184 +339,337 @@
     return e;
   }
 
-  function renderChoiceCard(container, q, cardClass, inputType){
-    var card = el("div", {class:"qcard " + cardClass, "data-qid": q.id});
-    var head = el("div", {class:"qhead"},
-      '<span class="qid">'+q.id+'</span><span class="qtag">'+q.tag+'</span>');
-    card.appendChild(head);
+  // ---- Intro screen -----------------------------------------------------
+  function renderIntro(){
+    progressHeader.classList.add("hidden");
+    navbar.classList.add("hidden");
+    stageContent.innerHTML = "";
+
+    var wrap = el("div", {class:"intro"});
+    wrap.appendChild(el("div", {class:"eyebrow"}, "EDM Lead Network — Broker Intake"));
+    wrap.appendChild(el("h1", null, "Broker Pre-Qualification Assessment"));
+    wrap.appendChild(el("p", {class:"dek"},
+      "13 questions, about 3 minutes. Every question is yes/no or multiple choice — nothing here requires a written answer, and you'll get your result immediately."));
+
+    var facts = el("div", {class:"intro-facts"});
+    ["7 requirements","90 points on fit","10-point integrity check"].forEach(function(f){
+      facts.appendChild(el("span", {class:"fact"}, f));
+    });
+    wrap.appendChild(facts);
+
+    var startBtn = el("button", {class:"btn-primary btn-full", type:"button"}, "Begin assessment");
+    startBtn.addEventListener("click", function(){
+      state.screen = "question";
+      state.qIndex = 0;
+      render();
+    });
+    wrap.appendChild(startBtn);
+
+    stageContent.appendChild(wrap);
+  }
+
+  // ---- Question screen ----------------------------------------------
+  function updateProgress(){
+    var q = QUESTIONS[state.qIndex];
+    progressHeader.classList.remove("hidden");
+    progressLabel.textContent = q.sectionLabel;
+    progressCount.textContent = (state.qIndex + 1) + " / " + TOTAL;
+    progressFill.style.width = Math.round(((state.qIndex) / TOTAL) * 100) + "%";
+  }
+
+  function renderQuestion(){
+    updateProgress();
+    navbar.classList.remove("hidden");
+    stageContent.innerHTML = "";
+
+    var q = QUESTIONS[state.qIndex];
+    var cardClass = q.kind === "gate" ? "gate" : (q.kind === "integrity" ? "integrity" : "scored");
+    var inputType = q.kind === "multiscore" ? "checkbox" : "radio";
+
+    var card = el("div", {class:"qcard " + cardClass});
+    var kicker = el("div", {class:"qkicker"});
+    kicker.appendChild(el("span", {class:"qtag"}, q.tag));
+    card.appendChild(kicker);
 
     var fs = el("fieldset");
+    fs.style.border = "none"; fs.style.margin = "0"; fs.style.padding = "0";
     var legend = el("legend", {class:"qtext"}, q.text);
     fs.appendChild(legend);
 
+    var existing = state.answers[q.id];
     var list = el("ul", {class:"opts"});
+
     q.options.forEach(function(opt, i){
       var li = el("li");
       var label = el("label", {class:"opt-label"});
-      var input = el("input", {
-        type: inputType,
-        name: q.id,
-        value: String(i)
-      });
+      var isChecked = false;
+      if (inputType === "radio"){
+        isChecked = existing === i;
+      } else {
+        isChecked = existing && existing.indexOf(i) !== -1;
+      }
+      if (isChecked) label.classList.add("selected");
+
+      var input = el("input", { type: inputType, name: q.id, value: String(i) });
+      if (isChecked) input.checked = true;
       label.appendChild(input);
-      var span = el("span", null, opt.label);
-      label.appendChild(span);
+      label.appendChild(el("span", null, opt.label));
       li.appendChild(label);
       list.appendChild(li);
+
+      input.addEventListener("change", function(){
+        if (inputType === "radio"){
+          handleSingleSelect(q, i);
+        } else {
+          handleMultiToggle(q, i, list);
+        }
+      });
     });
+
     fs.appendChild(list);
     card.appendChild(fs);
 
     if (q.cap){
       card.appendChild(el("p", {class:"helptext"}, "Capped at " + q.cap + " points regardless of how many you select."));
     }
-    container.appendChild(card);
-    return card;
+
+    stageContent.appendChild(card);
+
+    backBtn.style.visibility = state.qIndex === 0 ? "hidden" : "visible";
+
+    if (inputType === "checkbox"){
+      nextBtn.textContent = state.qIndex === TOTAL - 1 ? "See result" : "Next";
+      nextBtn.disabled = !(existing && existing.length > 0);
+      nextBtn.onclick = function(){ advance(); };
+    } else {
+      // single-select auto-advances; hide the manual Next button's usefulness but keep it as a fallback
+      nextBtn.textContent = state.qIndex === TOTAL - 1 ? "See result" : "Next";
+      nextBtn.disabled = existing === undefined;
+      nextBtn.onclick = function(){ advanceAfterSingle(q); };
+    }
   }
 
-  var sectionA = document.getElementById("sectionA");
-  var sectionB = document.getElementById("sectionB");
-  var sectionC = document.getElementById("sectionC");
+  function handleSingleSelect(q, idx){
+    state.answers[q.id] = idx;
+    // refresh selected styling without a full re-render (keeps focus in place)
+    var labels = stageContent.querySelectorAll(".opt-label");
+    labels.forEach(function(l, i){ l.classList.toggle("selected", i === idx); });
+    nextBtn.disabled = false;
+    // Gate and integrity answers are recorded and scored like everything else —
+    // a failed requirement no longer cuts the assessment short. See finish().
+    setTimeout(function(){ advanceAfterSingle(q); }, 320);
+  }
 
-  GATES.forEach(function(q){ renderChoiceCard(sectionA, q, "gate", "radio"); });
-  SCORED.forEach(function(q){
-    renderChoiceCard(sectionB, q, "scored", q.type === "multiscore" ? "checkbox" : "radio");
-  });
-  renderChoiceCard(sectionC, INTEGRITY, "integrity", "radio");
+  function advanceAfterSingle(q){
+    if (state.screen !== "question" || QUESTIONS[state.qIndex].id !== q.id) return; // already moved on
+    advance();
+  }
 
-  // Exclusive-option handling for multiscore ("None of the above" clears others)
-  SCORED.filter(function(q){ return q.type === "multiscore"; }).forEach(function(q){
-    var card = document.querySelector('[data-qid="'+q.id+'"]');
-    var boxes = card.querySelectorAll('input[type="checkbox"]');
-    boxes.forEach(function(box, i){
-      box.addEventListener("change", function(){
-        var opt = q.options[i];
-        if (opt.exclusive && box.checked){
-          boxes.forEach(function(b, j){ if (j !== i) b.checked = false; });
-        } else if (box.checked){
-          boxes.forEach(function(b, j){ if (q.options[j].exclusive) b.checked = false; });
-        }
-      });
+  function handleMultiToggle(q, idx, listEl){
+    var current = state.answers[q.id] || [];
+    var opt = q.options[idx];
+    var box = listEl.querySelectorAll('input[type="checkbox"]')[idx];
+
+    if (opt.exclusive && box.checked){
+      current = [idx];
+    } else if (box.checked){
+      current = current.filter(function(i){ return !q.options[i].exclusive; });
+      current.push(idx);
+    } else {
+      current = current.filter(function(i){ return i !== idx; });
+    }
+    state.answers[q.id] = current;
+
+    var boxes = listEl.querySelectorAll('input[type="checkbox"]');
+    boxes.forEach(function(b, i){
+      b.checked = current.indexOf(i) !== -1;
+      b.closest("label").classList.toggle("selected", b.checked);
     });
-  });
 
-  // ---- Scoring ------------------------------------------------------
-  var form = document.getElementById("intakeForm");
-  var formwrap = document.getElementById("formwrap");
-  var resultEl = document.getElementById("result");
+    nextBtn.disabled = current.length === 0;
+  }
 
-  form.addEventListener("submit", function(e){
-    e.preventDefault();
-
-    document.querySelectorAll(".qcard").forEach(function(c){ c.classList.remove("invalid"); });
-
-    var allQuestions = GATES.concat(SCORED).concat([INTEGRITY]);
-    var firstInvalid = null;
-    allQuestions.forEach(function(q){
-      var card = document.querySelector('[data-qid="'+q.id+'"]');
-      var checked = card.querySelectorAll('input:checked');
-      if (checked.length === 0){
-        card.classList.add("invalid");
-        if (!firstInvalid) firstInvalid = card;
-      }
-    });
-    if (firstInvalid){
-      firstInvalid.scrollIntoView({behavior:"smooth", block:"center"});
+  function advance(){
+    if (state.qIndex >= TOTAL - 1){
+      finish();
       return;
     }
+    state.qIndex += 1;
+    renderQuestion();
+  }
 
-    // Gate check
-    var disqualified = false;
-    GATES.forEach(function(q){
-      var checked = document.querySelector('input[name="'+q.id+'"]:checked');
-      var opt = q.options[Number(checked.value)];
-      if (opt.disqualify) disqualified = true;
-    });
-
-    var integrityChecked = document.querySelector('input[name="'+INTEGRITY.id+'"]:checked');
-    var integrityOpt = INTEGRITY.options[Number(integrityChecked.value)];
-    if (!integrityOpt.correct) disqualified = true;
-
-    // Score
-    var breakdown = [];
-    var total = 0;
-    SCORED.forEach(function(q){
-      var pts = 0;
-      if (q.type === "scored"){
-        var checked = document.querySelector('input[name="'+q.id+'"]:checked');
-        pts = q.options[Number(checked.value)].points;
-      } else {
-        var boxes = document.querySelectorAll('input[name="'+q.id+'"]:checked');
-        var raw = 0;
-        boxes.forEach(function(b){ raw += q.options[Number(b.value)].points; });
-        pts = Math.min(raw, q.cap);
-      }
-      total += pts;
-      var maxPts = q.type === "scored"
-        ? Math.max.apply(null, q.options.map(function(o){ return o.points; }))
-        : q.cap;
-      breakdown.push([q.id, pts, maxPts]);
-    });
-    if (integrityOpt.correct){
-      total += 10;
-      breakdown.push(["C1", 10, 10]);
-    } else {
-      breakdown.push(["C1", 0, 10]);
-    }
-
-    showResult(disqualified, total, breakdown);
+  backBtn.addEventListener("click", function(){
+    if (state.qIndex === 0) return;
+    state.qIndex -= 1;
+    renderQuestion();
   });
 
-  function showResult(disqualified, total, breakdown){
-    var badge = document.getElementById("badge");
-    var scoreDisplay = document.getElementById("scoreDisplay");
-    var msg = document.getElementById("resultMsg");
-    var breakdownEl = document.getElementById("breakdown");
+  // ---- Scoring & result -----------------------------------------------
+  function finish(){
+    var breakdown = [];
+    var requirements = [];
+    var total = 0;
 
-    scoreDisplay.innerHTML = (disqualified ? "—" : total) + '<span style="font-size:22px;color:var(--ink-soft);">/100</span>';
+    QUESTIONS.forEach(function(q){
+      if (q.kind === "gate"){
+        var gIdx = state.answers[q.id];
+        requirements.push({
+          label:q.shortLabel,
+          answer:q.options[gIdx].label,
+          failed: !!q.options[gIdx].disqualify
+        });
+      } else if (q.kind === "scored"){
+        var idx = state.answers[q.id];
+        var pts = q.options[idx].points;
+        total += pts;
+        var max = Math.max.apply(null, q.options.map(function(o){ return o.points; }));
+        breakdown.push({ label:q.shortLabel, pts:pts, max:max });
+      } else if (q.kind === "multiscore"){
+        var sel = state.answers[q.id] || [];
+        var raw = sel.reduce(function(sum, i){ return sum + q.options[i].points; }, 0);
+        var pts2 = Math.min(raw, q.cap);
+        total += pts2;
+        breakdown.push({ label:q.shortLabel, pts:pts2, max:q.cap });
+      } else if (q.kind === "integrity"){
+        var iIdx = state.answers[q.id];
+        var correct = q.options[iIdx].correct;
+        var pts3 = correct ? 10 : 0;
+        total += pts3;
+        breakdown.push({ label:q.shortLabel, pts:pts3, max:10 });
+        requirements.push({
+          label:q.shortLabel,
+          answer:q.options[iIdx].label,
+          failed: !correct
+        });
+      }
+    });
 
-    if (disqualified){
-      badge.className = "badge reject";
-      badge.textContent = "Not qualified";
-      msg.textContent = "One or more requirements in Section A weren't met, so this application doesn't move forward. Thank you for your time.";
-      breakdownEl.innerHTML = "";
+    var flaggedForFollowUp = requirements.some(function(r){ return r.failed; });
+
+    submitApplication(buildPipelinePayload(flaggedForFollowUp, total, breakdown, requirements));
+    showResult(flaggedForFollowUp, total, breakdown, requirements);
+  }
+
+  // Assembles what would get sent to the CRM/GHL on submit. Every answer is
+  // recorded and scored regardless of outcome — a failed requirement sets a
+  // tag for manual follow-up instead of blocking the applicant mid-assessment.
+  function buildPipelinePayload(flaggedForFollowUp, total, breakdown, requirements){
+    return {
+      answers: state.answers,
+      score: total,
+      breakdown: breakdown,
+      requirements: requirements,
+      tag: flaggedForFollowUp ? "non_qualified_pipeline" : "requirements_met",
+      needsManualContact: flaggedForFollowUp
+    };
+  }
+
+  function submitApplication(payload){
+    // Wire this up to your intake pipeline, e.g.:
+    // fetch("https://YOUR-GHL-WEBHOOK-URL", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(payload)
+    // });
+    console.log("Application payload (wire this to your pipeline):", payload);
+  }
+
+  function showResult(flaggedForFollowUp, total, breakdown, requirements){
+    state.screen = "result";
+    progressHeader.classList.add("hidden");
+    navbar.classList.add("hidden");
+    stageContent.innerHTML = "";
+
+    var card = el("div", {class:"resultcard"});
+    var badge = el("div", {class:"badge"});
+    var score = el("div", {class:"score mono"});
+    var msg = el("p", {class:"resultmsg"});
+
+    var classification;
+    if (flaggedForFollowUp){
+      classification = "hold";
+      badge.className = "badge hold";
+      badge.textContent = "Under review";
+      score.innerHTML = total + "<small>/100</small>";
+      msg.textContent = "Thanks for completing the assessment. A member of our team will review your responses and reach out directly with next steps.";
     } else if (total < 50){
+      classification = "reject";
       badge.className = "badge reject";
       badge.textContent = "Not qualified";
+      score.innerHTML = total + "<small>/100</small>";
       msg.textContent = "Your score is below the qualifying threshold. You're welcome to re-apply in 90 days.";
     } else if (total < 70){
+      classification = "hold";
       badge.className = "badge hold";
       badge.textContent = "Borderline — under review";
+      score.innerHTML = total + "<small>/100</small>";
       msg.textContent = "You've cleared every requirement but scored in the borderline range. You'll be routed to a short supplemental video round before a scheduling decision.";
     } else if (total < 85){
+      classification = "pass";
       badge.className = "badge pass";
       badge.textContent = "Qualified";
+      score.innerHTML = total + "<small>/100</small>";
       msg.textContent = "You've qualified for the next step. A calendar link for your video interview will be sent shortly.";
     } else {
+      classification = "pass";
       badge.className = "badge pass";
       badge.textContent = "High priority";
+      score.innerHTML = total + "<small>/100</small>";
       msg.textContent = "Strong score across the board. You'll be fast-tracked for a priority interview slot.";
     }
 
-    if (!disqualified){
-      var rows = breakdown.map(function(r){
-        return "<tr><td>"+r[0]+"</td><td>"+r[1]+" / "+r[2]+"</td></tr>";
-      }).join("");
-      breakdownEl.innerHTML = "<table>"+rows+"</table>";
+    card.appendChild(badge);
+    card.appendChild(score);
+    card.appendChild(msg);
+
+    var failedRequirements = requirements.filter(function(r){ return r.failed; });
+    if (failedRequirements.length){
+      var rq = el("div", {class:"breakdown"});
+      rq.appendChild(el("p", {class:"breakdown-title"}, "Requirements flagged (" + failedRequirements.length + " / " + requirements.length + ")"));
+      var rqTable = el("table");
+      failedRequirements.forEach(function(r){
+        var tr = el("tr");
+        tr.appendChild(el("td", null, r.label));
+        tr.appendChild(el("td", null, r.answer));
+        rqTable.appendChild(tr);
+      });
+      rq.appendChild(rqTable);
+      card.appendChild(rq);
     }
 
-    formwrap.classList.add("hide");
-    resultEl.classList.add("show");
-    window.scrollTo({top:0, behavior:"smooth"});
+    var bd = el("div", {class:"breakdown"});
+    bd.appendChild(el("p", {class:"breakdown-title"}, "Score breakdown"));
+    var table = el("table");
+    breakdown.forEach(function(r){
+      var tr = el("tr");
+      tr.appendChild(el("td", null, r.label));
+      tr.appendChild(el("td", null, r.pts + " / " + r.max));
+      table.appendChild(tr);
+    });
+    var totalRow = el("tr", {class:"total"});
+    totalRow.appendChild(el("td", null, "Total"));
+    totalRow.appendChild(el("td", null, total + " / 100"));
+    table.appendChild(totalRow);
+    bd.appendChild(table);
+    card.appendChild(bd);
+
+    var restart = el("button", {class:"btn-ghost btn-full", type:"button", style:"margin-top:24px;"}, "Start over");
+    restart.addEventListener("click", function(){
+      state = { screen:"intro", qIndex:0, answers:{} };
+      render();
+    });
+    card.appendChild(restart);
+
+    stageContent.appendChild(card);
+    window.scrollTo({ top:0, behavior:"smooth" });
   }
 
-  document.getElementById("restartBtn").addEventListener("click", function(){
-    form.reset();
-    document.querySelectorAll(".qcard").forEach(function(c){ c.classList.remove("invalid"); });
-    resultEl.classList.remove("show");
-    formwrap.classList.remove("hide");
-    window.scrollTo({top:0, behavior:"smooth"});
-  });
+  function render(){
+    if (state.screen === "intro") renderIntro();
+    else if (state.screen === "question") renderQuestion();
+  }
+
+  render();
 
 })();
 </script>
